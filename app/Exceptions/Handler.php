@@ -3,7 +3,13 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\AuthenticationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -34,8 +40,33 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (Exception $exception, $request) {
+    
+            if ($exception instanceof NotFoundHttpException) 
+                return $this->customResponse(404, 'The specified URL cannot be found.');
+
+            if ($exception instanceof MethodNotAllowedHttpException)
+                return $this->customResponse(405, 'The specified method for the request is invalid');
+    
+            if ($exception instanceof HttpException)
+                return $this->customResponse($exception->getStatusCode(), $exception->getMessage());
+
+            if ($exception instanceof AuthenticationException)
+                return $this->customResponse(401, ($exception->getMessage()) ? $exception->getMessage() : 'Unauthorized. ');
+    
+            if (config('app.debug'))
+                return parent::render($request, $exception);
+    
+            return $this->customResponse(500, 'Unexpected Exception. Try later');
+    
+    
         });
+    }
+
+    private function customResponse($code, $message) {
+        return response([
+                'success' => false,
+                'message' => $message
+            ], $code);
     }
 }

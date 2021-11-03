@@ -3,8 +3,6 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
-use Closure;
-use Auth;
 
 class Authenticate extends Middleware
 {
@@ -14,23 +12,10 @@ class Authenticate extends Middleware
      * @param  \Illuminate\Http\Request  $request
      * @return string|null
      */
-    protected function redirectTo($request)
-    {
-        if (! $request->expectsJson()) {
-            return route('login');
-        }
-    }
-
-    // public function handle($request, Closure $next)
+    // protected function redirectTo($request)
     // {
-    //     if (Auth::guard('api')->check()) {
-    //         return $next($request);
-    //     } else {
-    //         $message = [
-    //             "success" => false,
-    //             "message" => "Permission denied."
-    //         ];
-    //         return response($message, 401);
+    //     if (! $request->expectsJson()) {
+    //         return route('login');
     //     }
     // }
 }
