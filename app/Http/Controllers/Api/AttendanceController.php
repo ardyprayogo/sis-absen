@@ -32,4 +32,13 @@ class AttendanceController extends BaseApiController
             return $this->_responseError($th->getMessage());
         }
     }
+
+    public function report(Request $request) {
+        try {
+            $report = $this->repository->report($request);
+            return $this->_responseSuccess('Success', $report);
+        } catch (\Throwable $th) {
+            return $this->_responseError($th->getMessage());
+        }
+    }
 }

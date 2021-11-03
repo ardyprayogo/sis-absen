@@ -49,4 +49,17 @@ class AttendanceRepository extends Model
             ]);
         return $retval;
     }
+
+    public function report($request) {
+        $user = Auth::user();
+        $dateStart = $request->date_start;
+        $dateEnd = $request->date_end;
+        $employee_id = isset($request->employee_id) ? $request->employee_id : $user->employee_id;
+
+        $result = $this->model
+            ->where('employee_id', $employee_id)
+            ->whereBetween('date', [$dateStart, $dateEnd])
+            ->get();
+        return $result;
+    }
 }

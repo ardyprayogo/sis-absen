@@ -25,5 +25,6 @@ Route::middleware('auth:api')->group( function () {
     Route::prefix('/attendance')->group(function () {
         Route::post('/check-in', [AttendanceController::class, 'checkIn']);
         Route::post('/check-out', [AttendanceController::class, 'checkOut']);
+        Route::post('/report', [AttendanceController::class, 'report']);
     });
 });
