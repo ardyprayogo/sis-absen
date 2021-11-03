@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\BaseApiController;
 use Illuminate\Http\Request;
 use App\Models\Attendance\AttendanceRepository;
 
-class AttendanceController extends Controller
+class AttendanceController extends BaseApiController
 {
     //
     private $repository;
@@ -17,8 +17,17 @@ class AttendanceController extends Controller
 
     public function checkIn(Request $request) {
         try {
-            //code...
-            return $this->repository->checkIn($request);
+            $attendance = $this->repository->checkIn($request);
+            return $this->_responseSuccess('Check In berhasil', $attendance);
+        } catch (\Throwable $th) {
+            return $this->_responseError($th->getMessage());
+        }
+    }
+
+    public function checkOut(Request $request) {
+        try {
+            $attendance = $this->repository->checkOut($request);
+            return $this->_responseSuccess('Check Out berhasil', $attendance);
         } catch (\Throwable $th) {
             return $this->_responseError($th->getMessage());
         }

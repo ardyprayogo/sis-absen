@@ -16,7 +16,7 @@ class AddEmployeeIdOnTrAttendanceTable extends Migration
         //
         Schema::table('tr_attendance', function (Blueprint $table) {
             $table->integer('employee_id')->after('check_out')->nullable();
-            $table->index('tr_attendance');
+            $table->index('employee_id');
         });
     }
 
