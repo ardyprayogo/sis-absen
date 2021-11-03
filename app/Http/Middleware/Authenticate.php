@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Closure;
+use Auth;
 
 class Authenticate extends Middleware
 {
@@ -18,4 +20,17 @@ class Authenticate extends Middleware
             return route('login');
         }
     }
+
+    // public function handle($request, Closure $next)
+    // {
+    //     if (Auth::guard('api')->check()) {
+    //         return $next($request);
+    //     } else {
+    //         $message = [
+    //             "success" => false,
+    //             "message" => "Permission denied."
+    //         ];
+    //         return response($message, 401);
+    //     }
+    // }
 }
