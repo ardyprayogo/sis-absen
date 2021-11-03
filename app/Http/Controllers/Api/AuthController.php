@@ -7,11 +7,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Api\BaseApiController;
 use App\Models\User;
+use App\Models\Employee\EmployeeRepository;
+
+
 use DB;
 use Auth;
 
 class AuthController extends BaseApiController
 {
+    private $repository;
+
+    public function __construct(EmployeeRepository $repo) {
+        $this->repository = $repo;
+    }
+
     public function rules() {
         return [
             'email' => 'required|string|email|max:255|unique:users',
@@ -31,9 +40,9 @@ class AuthController extends BaseApiController
             $token = $user->createToken('Laravel Password Grant Client');
             $accessToken = $token->accessToken;
             $expired = $token->token->expires_at->format('Y-m-d H:i:s');
-            // $this->employeeRepo->saveEmployee($request, $user);
+            $this->repository->saveEmployee($request, $user);
             DB::commit();
-            return $this->_responseSuccess("Registrasi berhasil!", [
+            return $this->_responseSuccess("Registrasi berhasil", [
                 'access_token' => $accessToken,
                 'expired' => $expired
             ]);
@@ -51,15 +60,18 @@ class AuthController extends BaseApiController
                 'password' => $request->password
             ];
             if (Auth::attempt($credentials)) {
-                $token = Auth::user()->createToken('Laravel Password Grant Client');
+                $user = Auth::user();
+                $token = $user->createToken('Laravel Password Grant Client');
+                $employee = $user->employee;
                 $accessToken = $token->accessToken;
                 $expired = $token->token->expires_at->format('Y-m-d H:i:s');
-                return $this->_responseSuccess("Login berhasil!", [
+                return $this->_responseSuccess("Login berhasil", [
                     'access_token' => $accessToken,
-                    'expired' => $expired
+                    'expired' => $expired,
+                    'employee_info' => $employee
                 ]);
             } else {
-                return $this->_responseError("Login gagal!");
+                return $this->_responseError("Login gagal");
             }
         } catch (\Throwable $th) {
             return $this->_responseError($th->getMessage());
@@ -69,7 +81,7 @@ class AuthController extends BaseApiController
     public function tes(Request $request) {
         try {
             $user = Auth::user();
-            return $this->_responseSuccess(Auth::user());
+            return $this->_responseSuccess($user->employee);
         } catch (\Throwable $th) {
             return $this->_responseError($th->getMessage());
         }

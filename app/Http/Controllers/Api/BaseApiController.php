@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 class BaseApiController extends Controller
 {
-    //
-    //
 
     public function _validators(Request $request, $rules) {
         $validator = Validator::make($request->all(), $rules);
