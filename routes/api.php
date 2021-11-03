@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AttendanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +16,13 @@ use App\Http\Controllers\Api\AuthController;
 |
 */
 
-Route::post('/register', [AuthController::class, 'register'])->name('register.api');
-Route::post('/login', [AuthController::class, 'login'])->name('login.api');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:api')->group( function () {
     Route::post('/tes', [AuthController::class, 'tes']);
+
+    Route::prefix('/attendance')->group(function () {
+        Route::post('/check-in', [AttendanceController::class, 'checkIn']);
+    });
 });

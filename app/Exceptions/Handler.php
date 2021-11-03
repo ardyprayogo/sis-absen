@@ -49,7 +49,10 @@ class Handler extends ExceptionHandler
                 return $this->customResponse(405, 'The specified method for the request is invalid');
     
             if ($exception instanceof HttpException)
-                return $this->customResponse($exception->getStatusCode(), $exception->getMessage());
+                return $this->customResponse(401, $exception->getMessage());
+            
+            if ($exception instanceof ModelNotFoundException)
+                return $this->customResponse(402, $exception->getMessage());
 
             if ($exception instanceof AuthenticationException)
                 return $this->customResponse(401, ($exception->getMessage()) ? $exception->getMessage() : 'Unauthorized. ');
