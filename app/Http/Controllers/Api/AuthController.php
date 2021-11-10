@@ -77,6 +77,15 @@ class AuthController extends BaseApiController
         }
     }
 
+    public function getProfile(Request $request) {
+        try {
+            $empoyee = $this->repository->getEmployee();
+            return $this->_responseSuccess("Success", $empoyee);
+        } catch (\Throwable $th) {
+            return $this->_responseError($th->getMessage());
+        }
+    }
+
     public function tes(Request $request) {
         try {
             $user = Auth::user();
@@ -85,5 +94,11 @@ class AuthController extends BaseApiController
             return $this->_responseError($th->getMessage());
         }
         
+    }
+
+    public function logout(Request $request) {
+        $user = Auth::user()->token();
+        $user->revoke();
+        return $this->_responseSuccess("Berhasil logout");
     }
 }
