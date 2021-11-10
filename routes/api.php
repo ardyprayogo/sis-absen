@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\DivisionController;
+use App\Http\Controllers\Api\LevelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,5 +46,12 @@ Route::middleware('auth:api')->group( function () {
         Route::post('/create', [DivisionController::class, 'create']);
         Route::post('/update', [DivisionController::class, 'update']);
         Route::post('/delete', [DivisionController::class, 'delete']);
+    });
+
+    Route::prefix('/level')->group(function () {
+        Route::get('/get', [LevelController::class, 'get']);
+        Route::post('/create', [LevelController::class, 'create']);
+        Route::post('/update', [LevelController::class, 'update']);
+        Route::post('/delete', [LevelController::class, 'delete']);
     });
 });
