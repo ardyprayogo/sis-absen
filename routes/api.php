@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\Api\DivisionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,5 +38,12 @@ Route::middleware('auth:api')->group( function () {
         Route::post('/create', [EmployeeController::class, 'create']);
         Route::post('/update', [EmployeeController::class, 'update']);
         Route::post('/delete', [EmployeeController::class, 'delete']);
+    });
+
+    Route::prefix('/division')->group(function () {
+        Route::get('/get', [DivisionController::class, 'get']);
+        Route::post('/create', [DivisionController::class, 'create']);
+        Route::post('/update', [DivisionController::class, 'update']);
+        Route::post('/delete', [DivisionController::class, 'delete']);
     });
 });
