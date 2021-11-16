@@ -16,7 +16,13 @@ class DivisionController extends BaseApiController
 
     public function get(Request $request) {
         try {
-            $divisions = $this->model->where('status', '00')->get();
+            $name = isset($request->name) ? $request->name : null;
+            $divisions = $this->model
+                ->where('status', '00');
+            if ($name != null) {
+                $divisions = $divisions->where('division_name', 'like', '%'.$name.'%');
+            }
+            $divisions = $divisions->get();
             return $this->_responseSuccess("Success", $divisions);
         } catch (\Throwable $th) {
             return $this->_responseError($th->getMessage());

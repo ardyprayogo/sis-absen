@@ -48,7 +48,9 @@ class EmployeeRepository extends Model
         return $employee;
     }
 
-    public function listEmployee() {
+    public function listEmployee($request) {
+
+        $employeeName = isset($request->name) ? $request->name : null;
 
         $employee = $this->model
             ->select(
@@ -58,10 +60,13 @@ class EmployeeRepository extends Model
                 )
             ->join('ms_levels', 'ms_levels.id', 'ms_employees.level_id')
             ->join('ms_divisions', 'ms_divisions.id', 'ms_employees.division_id')
-            ->where('ms_employees.status', '00')
-            ->get();
+            ->where('ms_employees.status', '00');
 
-        return $employee;
+        if ($employeeName != null) {
+            $employee = $employee->where('ms_employees.employee_name', 'like', '%'.$employeeName.'%');
+        }
+
+        return $employee->get();
     }
 
     public function updateEmployee($request) {

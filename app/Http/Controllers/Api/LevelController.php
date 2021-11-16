@@ -17,7 +17,13 @@ class LevelController extends BaseApiController
 
     public function get(Request $request) {
         try {
-            $levels = $this->model->where('status', '00')->get();
+            $name = isset($request->name) ? $request->name : null;
+            $levels = $this->model
+                ->where('status', '00');
+            if ($name != null) {
+                $levels = $levels->where('level_name', 'like', '%'.$name.'%');
+            }
+            $levels = $levels->get();
             return $this->_responseSuccess("Success", $levels);
         } catch (\Throwable $th) {
             return $this->_responseError($th->getMessage());

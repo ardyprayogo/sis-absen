@@ -30,7 +30,7 @@ class EmployeeController extends BaseApiController
 
     public function get(Request $request) {
         try {
-            $empoyee = $this->repository->listEmployee();
+            $empoyee = $this->repository->listEmployee($request);
             return $this->_responseSuccess("Success", $empoyee);
         } catch (\Throwable $th) {
             return $this->_responseError($th->getMessage());
