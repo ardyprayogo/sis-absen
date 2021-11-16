@@ -16,8 +16,8 @@ class CreateTrAttendanceTable extends Migration
         Schema::create('tr_attendance', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->dateTime('check_in')->comment('Absen masuk')->nullable();
-            $table->dateTime('check_out')->comment('Absen keluar')->nullable();
+            $table->time('check_in')->comment('Absen masuk')->nullable();
+            $table->time('check_out')->comment('Absen keluar')->nullable();
             $table->string('status', 2)->default('00');
             $table->string('created_user', 50)->nullable();
             $table->string('updated_user', 50)->nullable();
