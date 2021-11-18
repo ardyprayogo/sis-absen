@@ -21,7 +21,16 @@ class AttendanceRepository extends Model
         $user = Auth::user();
         $date = Carbon::now()->format('Y-m-d');
         $dateTime = Carbon::now()->toDateTimeString();
-        $retval = $this->model->updateOrCreate([
+        $count = $this->model
+                ->where('date', $date)
+                ->where('employee_id', $user->employee_id)
+                ->whereNotNull('check_in')
+                ->count();
+
+        if ($count > 0) {
+            throw new \Exception("Data absen sudah ada");
+        } else {
+            $retval = $this->model->updateOrCreate([
                 'date' => $date,
                 'employee_id' => $user->employee_id
             ],[
@@ -31,6 +40,7 @@ class AttendanceRepository extends Model
                 'created_user' => $user->employee->employee_name,
                 'updated_user' => $user->employee->employee_name
             ]);
+        }
         return $retval;
     }
 
@@ -38,7 +48,16 @@ class AttendanceRepository extends Model
         $user = Auth::user();
         $date = Carbon::now()->format('Y-m-d');
         $dateTime = Carbon::now()->toDateTimeString();
-        $retval = $this->model->updateOrCreate([
+        $count = $this->model
+                    ->where('date', $date)
+                    ->where('employee_id', $user->employee_id)
+                    ->whereNotNull('check_out')
+                    ->count();
+        
+        if ($count > 0) {
+            throw new \Exception("Data absen sudah ada");
+        } else {
+            $retval = $this->model->updateOrCreate([
                 'date' => $date,
                 'employee_id' => $user->employee_id
             ],[
@@ -48,6 +67,7 @@ class AttendanceRepository extends Model
                 'created_user' => $user->employee->employee_name,
                 'updated_user' => $user->employee->employee_name
             ]);
+        } 
         return $retval;
     }
 
