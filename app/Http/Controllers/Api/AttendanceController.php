@@ -41,4 +41,22 @@ class AttendanceController extends BaseApiController
             return $this->_responseError($th->getMessage());
         }
     }
+
+    public function percent(Request $request) {
+        try {
+            $report = $this->repository->getPercent($request);
+            return $this->_responseSuccess('Success', $report);
+        } catch (\Throwable $th) {
+            return $this->_responseError($th->getMessage());
+        }
+    }
+
+    public function getLongLat(Request $request) {
+        try {
+            $report = $this->repository->getLongLat($request);
+            return $this->_responseSuccess('Success', $report);
+        } catch (\Throwable $th) {
+            return $this->_responseError($th->getMessage());
+        }
+    }
 }

@@ -93,4 +93,39 @@ class AttendanceRepository extends Model
             ->get();
         return $result;
     }
+
+    public function getPercent($request) {
+        $user = Auth::user();
+        $day = date('Y-m-d');
+        $now = date('d');
+
+        $workDay = 0;
+        for($i=1; $i<$now; $i++)
+        {
+            $repeat = strtotime("-1 day", strtotime($day));
+            $day = date('l', $repeat);
+            if ($day == 'Sunday' || $day == 'Saturday') continue;
+            $workDay += 1;
+        }
+        $attend = $this->model
+            ->select(
+                'date'
+            )
+            ->where('employee_id', $user->employee_id)
+            ->whereMonth('date', date('m'))
+            ->count();
+        
+        $percent = $attend/$workDay * 100;
+
+        return [
+            'attendance' => $attend,
+            'work' => $workDay,
+            'percentation' => number_format((float)$percent, 2, '.', '')
+        ];
+    }
+
+    public function getLongLat($request) {
+        return DB::table('sys_config')
+                ->first();
+    }
 }

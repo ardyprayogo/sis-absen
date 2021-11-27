@@ -32,6 +32,8 @@ Route::middleware('auth:api')->group( function () {
         Route::post('/check-in', [AttendanceController::class, 'checkIn']);
         Route::post('/check-out', [AttendanceController::class, 'checkOut']);
         Route::post('/report', [AttendanceController::class, 'report']);
+        Route::post('/percent', [AttendanceController::class, 'percent']);
+        Route::get('/long-lat', [AttendanceController::class, 'getLongLat']);
     });
 
     Route::prefix('/employee')->group(function () {
